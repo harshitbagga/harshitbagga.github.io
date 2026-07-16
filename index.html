@@ -1,600 +1,876 @@
 <!DOCTYPE html>
-<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
-<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
-
-
-
+<html lang="en">
 <head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Harshit Bagga — Technical CSM × Developer</title>
+<meta name="description" content="Harshit Bagga — Customer Success × Engineering. Enterprise CPaaS at Exotel, Bengaluru. Half engineer, half relationship builder — fully accountable for your success." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='%23FF4D00'/></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --bg:        #F2F0EA;   /* cream */
+  --bg-dark:   #131313;   /* ink section */
+  --ink:       #141414;
+  --ink-soft:  rgba(20,20,20,.60);
+  --cream:     #F2F0EA;
+  --cream-soft:rgba(242,240,234,.60);
+  --line:      rgba(20,20,20,.16);
+  --line-inv:  rgba(242,240,234,.18);
+  --accent:    #FF4D00;   /* signal orange */
+  --green:     #21B573;
 
-<meta name="description" content="Harshit Bagga Web Portfolio">
-<meta name="author" content="Harshit Bagga">
+  --font-display:'Anton', Impact, sans-serif;
+  --font-mono:'Space Mono', ui-monospace, 'Courier New', monospace;
 
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  --ease:cubic-bezier(.22,1,.36,1);
+  --t-fast:.2s; --t-base:.4s; --t-slow:.7s;
 
-<title>Portfolio</title>
+  --s-1:8px; --s-2:16px; --s-3:24px; --s-4:32px; --s-5:48px; --s-6:64px; --s-7:96px; --s-8:128px;
+  --container:1280px;
+}
 
-<!-- STYLES -->
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="css/plugins.css" />
-<link rel="stylesheet" type="text/css" href="css/style.css" />
-<!--[if lt IE 9]> <script type="text/javascript" src="js/modernizr.custom.js"></script> <![endif]-->
-<!-- /STYLES -->
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-mono);
+  font-size:14px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+::selection{background:var(--accent);color:var(--cream)}
+
+section{position:relative;scroll-margin-top:72px}
+.wrap{max-width:var(--container);margin:0 auto;padding:0 var(--s-4)}
+@media(max-width:640px){ .wrap{padding:0 var(--s-3)} }
+
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+
+.skip-link{
+  position:fixed;top:-100px;left:16px;z-index:1000;
+  background:var(--ink);color:var(--cream);padding:10px 16px;
+  font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  transition:top var(--t-fast) var(--ease);
+}
+.skip-link:focus{top:16px}
+
+/* ============================================================
+   CONTRAST-ADAPTIVE CURSOR  (the requested change)
+   White elements + mix-blend-mode:difference  →  the cursor
+   renders BLACK over light surfaces and WHITE over dark ones,
+   inverting per-pixel — even across the giant headline glyphs.
+   ============================================================ */
+.cursor{
+  position:fixed;top:0;left:0;z-index:9999;
+  pointer-events:none;
+  mix-blend-mode:difference;
+  opacity:0;
+  transition:opacity .3s ease;
+}
+body.cursor-on .cursor{opacity:1}
+.cursor > span{display:block;border-radius:50%;transition:transform .25s var(--ease),opacity .25s ease}
+.cursor--dot > span{width:8px;height:8px;margin:-4px 0 0 -4px;background:#fff}
+.cursor--ring > span{width:38px;height:38px;margin:-19px 0 0 -19px;border:1.5px solid #fff}
+body.cursor-hover .cursor--ring > span{transform:scale(1.65);opacity:.9}
+body.cursor-hover .cursor--dot  > span{transform:scale(.45)}
+body.cursor-down  .cursor--ring > span{transform:scale(.8)}
+
+@media (hover:hover) and (pointer:fine){
+  body.cursor-on, body.cursor-on a, body.cursor-on button{cursor:none}
+}
+@media (hover:none), (pointer:coarse){
+  .cursor{display:none}
+}
+
+/* ============================================================
+   SCROLL PROGRESS
+   ============================================================ */
+.progress{
+  position:fixed;top:0;left:0;right:0;height:3px;z-index:900;
+  background:var(--accent);transform-origin:0 50%;transform:scaleX(0);
+}
+
+/* ============================================================
+   HEADER — fixed; same difference-blend trick as the cursor,
+   so it self-inverts: dark over cream, cream over dark.
+   ============================================================ */
+.site-head{
+  position:fixed;top:0;left:0;right:0;z-index:920;
+  mix-blend-mode:difference;color:#F2F0EA;
+  display:flex;justify-content:space-between;align-items:center;gap:var(--s-3);
+  padding:var(--s-3) var(--s-4);
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  pointer-events:none;
+}
+.site-head a,.site-head .brand{pointer-events:auto}
+.brand{font-weight:700}
+.brand em{font-style:normal}
+.nav{display:flex;gap:var(--s-4);flex-wrap:wrap}
+.nav a{position:relative;padding:4px 0}
+.nav a::after{
+  content:"";position:absolute;left:0;bottom:0;height:1.5px;width:100%;
+  background:#F2F0EA;transform:scaleX(0);transform-origin:100% 50%;
+  transition:transform var(--t-base) var(--ease);
+}
+.nav a:hover::after,.nav a:focus-visible::after{transform:scaleX(1);transform-origin:0 50%}
+@media(max-width:760px){
+  .site-head{flex-direction:column;align-items:flex-start;gap:var(--s-1);padding:var(--s-2) var(--s-3)}
+  .nav{gap:var(--s-3)}
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  min-height:100svh;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:calc(var(--s-8) + var(--s-4)) 0 var(--s-5);
+  overflow:hidden;
+}
+#net{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero .wrap{position:relative;z-index:2;width:100%}
+
+.hero-eyebrow{
+  font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-soft);
+  display:flex;justify-content:space-between;align-items:center;gap:var(--s-3);
+  margin-bottom:-0.6em; /* the big name deliberately overlaps this line */
+}
+.status{display:inline-flex;align-items:center;gap:10px;color:var(--ink-soft);white-space:nowrap}
+.status .pulse{
+  width:8px;height:8px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 0 0 rgba(33,181,115,.5);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(33,181,115,.45)}
+  70%{box-shadow:0 0 0 10px rgba(33,181,115,0)}
+  100%{box-shadow:0 0 0 0 rgba(33,181,115,0)}
+}
+
+.hero-name{
+  font-family:var(--font-display);
+  font-size:clamp(64px,14.5vw,180px);
+  line-height:.92;
+  text-transform:uppercase;
+  letter-spacing:.005em;
+  position:relative;z-index:1;
+}
+.hero-name .mask{display:block;overflow:hidden}
+.hero-name .mask > span{display:block;transform:translateY(112%);}
+body.loaded .hero-name .mask > span{
+  transition:transform 1s var(--ease);
+  transform:translateY(0);
+}
+body.loaded .hero-name .mask:nth-child(2) > span{transition-delay:.1s}
+.hero-name .dot{color:var(--accent)}
+
+.hero-foot{
+  margin-top:var(--s-6);
+  border-top:1px solid var(--line);
+  padding-top:var(--s-4);
+  display:flex;justify-content:space-between;align-items:flex-end;gap:var(--s-5);
+  flex-wrap:wrap;
+}
+.hero-role p:first-child{font-weight:700;font-size:15px;max-width:34ch}
+.hero-role p{color:var(--ink)}
+.hero-role .meta{color:var(--ink-soft)}
+.hero-contact{text-align:right;color:var(--ink-soft)}
+.hero-contact a:hover{color:var(--accent)}
+.hero-cta{display:flex;gap:var(--s-2);justify-content:flex-end;margin-top:var(--s-2)}
+@media(max-width:760px){
+  .hero{padding-top:calc(var(--s-8) + var(--s-6))}
+  .hero-eyebrow{flex-direction:column;align-items:flex-start;gap:6px;margin-bottom:var(--s-2)}
+  .hero-contact{text-align:left}
+  .hero-cta{justify-content:flex-start}
+}
+
+.btn{
+  display:inline-block;
+  font-family:var(--font-mono);font-size:12px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;
+  padding:14px 26px;border:1.5px solid var(--ink);
+  background:transparent;color:var(--ink);
+  transition:background var(--t-fast) ease,color var(--t-fast) ease;
+  will-change:transform;
+}
+.btn--solid{background:var(--ink);color:var(--cream)}
+.btn--solid:hover{background:var(--accent);border-color:var(--accent);color:var(--cream)}
+.btn--ghost:hover{background:var(--ink);color:var(--cream)}
+.btn--inv{border-color:var(--cream);color:var(--cream)}
+.btn--inv:hover{background:var(--cream);color:var(--ink)}
+
+/* ============================================================
+   MARQUEE
+   ============================================================ */
+.marquee{
+  background:var(--bg-dark);color:var(--cream);
+  border-block:1px solid var(--bg-dark);
+  overflow:hidden;white-space:nowrap;
+  padding:14px 0;
+}
+.marquee-track{display:inline-block;animation:marquee 26s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee span{
+  font-size:13px;letter-spacing:.24em;text-transform:uppercase;
+  padding:0 var(--s-3);
+}
+.marquee .sep{color:var(--accent)}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ============================================================
+   SECTIONS — SHARED
+   ============================================================ */
+.section{padding:var(--s-8) 0}
+@media(max-width:760px){ .section{padding:var(--s-7) 0} }
+.section--dark{background:var(--bg-dark);color:var(--cream)}
+
+.sec-head{
+  display:flex;justify-content:space-between;align-items:baseline;gap:var(--s-3);
+  margin-bottom:var(--s-6);flex-wrap:wrap;
+}
+.sec-label{
+  font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:700;
+}
+.sec-title{
+  font-family:var(--font-display);text-transform:uppercase;
+  font-size:clamp(40px,7vw,84px);line-height:.95;
+}
+.sec-note{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.section--dark .sec-note{color:var(--cream-soft)}
+
+/* reveal on scroll */
+[data-reveal]{opacity:0;transform:translateY(26px);transition:opacity var(--t-slow) var(--ease),transform var(--t-slow) var(--ease);transition-delay:var(--d,0s)}
+[data-reveal].in{opacity:1;transform:none}
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:var(--s-7)}
+@media(max-width:900px){ .about-grid{grid-template-columns:1fr;gap:var(--s-5)} }
+.about-lede{
+  font-size:clamp(20px,2.6vw,30px);
+  line-height:1.45;font-weight:700;
+  max-width:28ch;
+}
+.about-lede em{font-style:normal;color:var(--accent)}
+.about-copy p{max-width:52ch;color:var(--ink-soft)}
+.about-copy p + p{margin-top:var(--s-3)}
+
+.stats{
+  margin-top:var(--s-6);
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--line);
+}
+@media(max-width:640px){ .stats{grid-template-columns:1fr} }
+.stat{padding:var(--s-4) var(--s-3) 0}
+.stat + .stat{border-left:1px solid var(--line)}
+@media(max-width:640px){ .stat + .stat{border-left:0;border-top:1px solid var(--line)} }
+.stat b{
+  font-family:var(--font-display);font-size:clamp(44px,6vw,72px);line-height:1;display:block;
+}
+.stat span{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+
+/* ============================================================
+   XP  (dark)
+   ============================================================ */
+.xp-item{
+  border-top:1px solid var(--line-inv);
+  padding:var(--s-5) 0;
+  display:grid;grid-template-columns:180px 1fr;gap:var(--s-5);
+}
+.xp-item:last-child{border-bottom:1px solid var(--line-inv)}
+@media(max-width:760px){ .xp-item{grid-template-columns:1fr;gap:var(--s-2)} }
+.xp-when{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--cream-soft)}
+.xp-role{font-family:var(--font-display);font-size:clamp(24px,3.4vw,40px);text-transform:uppercase;line-height:1.05}
+.xp-org{margin-top:6px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.xp-desc{margin-top:var(--s-3);max-width:64ch;color:var(--cream-soft)}
+.xp-tags{margin-top:var(--s-3);display:flex;flex-wrap:wrap;gap:8px}
+.xp-tags span{
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--line-inv);padding:6px 10px;color:var(--cream-soft);
+}
+.xp-subhead{margin-top:var(--s-7);padding-bottom:var(--s-3)}
+.xp-item--edu .xp-role{font-size:clamp(20px,2.4vw,30px)}
+.xp-item--edu .xp-desc{margin-top:var(--s-1)}
+
+/* ============================================================
+   SKILLS
+   ============================================================ */
+.skill-group{border-top:1px solid var(--line);padding:var(--s-4) 0;display:grid;grid-template-columns:260px 1fr;gap:var(--s-4)}
+.skill-group:last-child{border-bottom:1px solid var(--line)}
+@media(max-width:760px){ .skill-group{grid-template-columns:1fr;gap:var(--s-2)} }
+.skill-name{font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{
+  font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid var(--ink);padding:8px 14px;
+  transition:background var(--t-fast) ease,color var(--t-fast) ease;
+}
+.chip:hover{background:var(--ink);color:var(--cream)}
+
+/* ============================================================
+   WORK — "THINGS I'VE BUILT."
+   Dark row list; an orange panel slides up behind the row on
+   hover/focus and all row content flips to ink.
+   ============================================================ */
+.proj-list{border-bottom:1px solid var(--line-inv)}
+.proj{
+  position:relative;overflow:hidden;display:grid;
+  grid-template-columns:72px 1fr auto;gap:var(--s-4);align-items:center;
+  padding:var(--s-5) var(--s-3);
+  border-top:1px solid var(--line-inv);
+  color:var(--cream);
+}
+@media(max-width:760px){ .proj{grid-template-columns:1fr;gap:var(--s-2);padding:var(--s-4) var(--s-2)} }
+.proj::before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:var(--accent);
+  transform:scaleX(0);transform-origin:0 50%;
+  transition:transform .5s var(--ease);
+}
+.proj:hover::before,.proj:focus-visible::before{transform:scaleX(1)}
+.proj > *{position:relative;z-index:1}
+.proj-idx{font-size:13px;letter-spacing:.16em;color:var(--cream-soft);transition:color var(--t-base) ease}
+.proj-title{
+  font-family:var(--font-display);text-transform:uppercase;line-height:1.05;
+  font-size:clamp(26px,3.6vw,44px);
+  transition:color var(--t-base) ease;
+}
+.proj-desc{
+  display:block;margin-top:10px;max-width:62ch;
+  font-size:12.5px;line-height:1.6;color:var(--cream-soft);
+  transition:color var(--t-base) ease;
+}
+.proj:hover .proj-desc,.proj:focus-visible .proj-desc{color:var(--ink)}
+.proj-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:var(--s-2)}
+.proj-chips span{
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--line-inv);padding:6px 12px;color:var(--cream-soft);
+  transition:color var(--t-base) ease,border-color var(--t-base) ease;
+}
+.proj-meta{
+  display:flex;flex-direction:column;align-items:flex-end;gap:8px;
+  font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--cream-soft);transition:color var(--t-base) ease;white-space:nowrap;
+}
+@media(max-width:760px){ .proj-meta{flex-direction:row;align-items:center;justify-content:space-between;width:100%} }
+.proj-arrow{
+  font-family:var(--font-mono);font-size:22px;line-height:1;
+  transition:transform var(--t-base) var(--ease),color var(--t-base) ease;
+}
+.proj:hover,.proj:focus-visible{color:var(--ink)}
+.proj:hover .proj-idx,.proj:focus-visible .proj-idx,
+.proj:hover .proj-meta,.proj:focus-visible .proj-meta{color:var(--ink)}
+.proj:hover .proj-chips span,.proj:focus-visible .proj-chips span{color:var(--ink);border-color:var(--ink)}
+.proj:hover .proj-arrow,.proj:focus-visible .proj-arrow{transform:translate(5px,-5px)}
+.section--dark + .section--dark{border-top:1px solid var(--line-inv)}
+
+/* ============================================================
+   CONTACT (dark)
+   ============================================================ */
+.contact-title{
+  font-family:var(--font-display);text-transform:uppercase;
+  font-size:clamp(56px,11vw,150px);line-height:.92;
+}
+.contact-title .dot{color:var(--accent)}
+.contact-grid{
+  margin-top:var(--s-6);border-top:1px solid var(--line-inv);padding-top:var(--s-5);
+  display:grid;grid-template-columns:1fr 1fr;gap:var(--s-5);
+}
+@media(max-width:760px){ .contact-grid{grid-template-columns:1fr} }
+.contact-block .lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-soft);display:block;margin-bottom:10px}
+.contact-block a{display:inline-block;font-size:clamp(16px,2.2vw,22px);font-weight:700}
+.contact-block a:hover{color:var(--accent)}
+.contact-links{display:flex;gap:var(--s-3);flex-wrap:wrap;margin-top:var(--s-2)}
+.contact-links a{font-size:13px;letter-spacing:.14em;text-transform:uppercase;border-bottom:1.5px solid var(--line-inv);padding-bottom:4px}
+.contact-links a:hover{border-color:var(--accent);color:var(--accent)}
+
+.footer{
+  border-top:1px solid var(--line-inv);
+  margin-top:var(--s-7);padding-top:var(--s-4);
+  display:flex;justify-content:space-between;gap:var(--s-3);flex-wrap:wrap;
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-soft);
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  .hero-name .mask > span{transform:none;transition:none}
+  [data-reveal]{opacity:1;transform:none;transition:none}
+  .marquee-track{animation:none}
+  .status .pulse{animation:none}
+  .cursor > span{transition:none}
+  .proj::before{transition:none}
+}
+</style>
 </head>
 
 <body>
+<a class="skip-link" href="#about">Skip to content</a>
 
-<!-- WRAPPER ALL -->
-<div class="arlo_tm_wrapper_all">
+<!-- contrast-adaptive cursor -->
+<div class="cursor cursor--ring" aria-hidden="true"><span></span></div>
+<div class="cursor cursor--dot" aria-hidden="true"><span></span></div>
 
-	<div id="arlo_tm_popup_blog">
-		<div class="container">
-			<div class="inner_popup scrollable"></div>
-		</div>
-		<span class="close"><a href="#"></a></span>
-	</div>
-	
-	<!-- PRELOADER -->
-	<div class="arlo_tm_preloader">
-		<div class="spinner_wrap">
-			<div class="spinner"></div>
-		</div>
-	</div>
-	<!-- /PRELOADER -->
-	
-	<!-- MOBILE MENU -->
-	<div class="arlo_tm_mobile_header_wrap">
-		<div class="main_wrap">
-			<div class="logo">
-				<img src="img/logo/mobile_logo.png" alt="" />
-			</div>
-			<div class="arlo_tm_trigger">
-				<div class="hamburger hamburger--collapse-r">
-					<div class="hamburger-box">
-						<div class="hamburger-inner"></div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="arlo_tm_mobile_menu_wrap">
-   			<div class="mob_menu">
-				<ul class="anchor_nav">
-					<li><a href="#home">Home</a></li>
-					<li><a href="#about">About</a></li>
-					<li><a href="#services">Projects</a></li>
-					<li><a href="#portfolio">Screenshots</a></li>
-					<li><a href="#contact">Contact</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<!-- /MOBILE MENU -->
-	
-    <!-- CONTENT -->
-	<div class="arlo_tm_content">
-		
-		<!-- LEFTPART -->
-		<div class="arlo_tm_leftpart_wrap">
-			<div class="leftpart_inner">
-				<div class="logo_wrap">
-					<a href="#"><img src="img/logo/desktop-logo.png" alt="" /></a>
-				</div>
-				<div class="menu_list_wrap">
-					<ul class="anchor_nav">
-						<li><a href="#home">Home</a></li>
-						<li><a href="#about">About</a></li>
-						<li><a href="#services">Projects</a></li>
-						<li><a href="#portfolio">Screenshots</a></li>
-						<li><a href="#contact">Contact</a></li>
-					</ul>
-				</div>
-				<div class="leftpart_bottom">
-					<div class="social_wrap">
-						<ul>
-							<li><a href="https://www.facebook.com/harshit.bagga.35"><i class="xcon-facebook"></i></a></li>
-							<li><a href="https://twitter.com/Thinkeerr774"><i class="xcon-twitter"></i></a></li>
-							<li><a href="https://www.linkedin.com/in/774-harshit-bagga/"><i class="xcon-linkedin"></i></a></li>
-							<li><a href="https://www.instagram.com/_harshitbagga/"><i class="xcon-instagram"></i></a></li>
-							<li><a href="mailto:harshitbagga10@gmail.com"><i class="xcon-mail-alt"></i></a></li>
-						</ul>
-					</div>
-				</div>
-				<a class="arlo_tm_resize" href="#"><i class="xcon-angle-left"></i></a>
-			</div>
-		</div>
-		<!-- /LEFTPART -->
-		
-		<!-- RIGHTPART -->
-		<div class="arlo_tm_rightpart">
-			<div class="rightpart_inner">
-				<div class="arlo_tm_section" id="home">
-					<div class="arlo_tm_hero_header_wrap">
-						<div class="arlo_tm_universal_box_wrap">
-							<div class="bg_wrap">
-								<div class="overlay_image hero jarallax" data-speed="0.1"></div>
-								<div class="overlay_color hero"></div>
-							</div>
-							<div class="content hero">
-								<div class="inner_content">
-									<div class="image_wrap">
-										<img src="img/hero/img.jpg" alt="" />
-									</div>
-									<div class="name_holder">
-										<h3>Harshit <span>Bagga</span></h3>
-									</div>
-									<div class="text_typing">
-										<p>I'm a <span class="arlo_tm_animation_text_word"></span></p>
-									</div>
-								</div>
-							</div>
-							<div class="arlo_tm_arrow_wrap bounce anchor">
-								<a href="#about"><i class="xcon-angle-double-down"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<!-- ABOUT -->
-				<div class="arlo_tm_section relative" id="about">
-					<div class="arlo_tm_about_wrapper_all">
-						<div class="container">
-							<div class="arlo_tm_title_holder">
-								<h3>About Me</h3>
-								<span>All information about me</span>
-							</div>
-							<div class="arlo_tm_about_wrap">
-								<div class="author_wrap">
-									<div class="leftbox">
-										<div class="about_image_wrap parallax" data-relative-input="true">
-											<div class="image layer" data-depth="0.1">
-												<img src="img/about/550x640.jpg" alt="" />
-												<div class="inner" data-img-url="img/about/1.jpg"></div>
-											</div>
-											<div class="border layer" data-depth="0.2">
-												<img src="img/about/550x640.jpg" alt="" />
-												<div class="inner"></div>
-											</div>
-										</div>
+<div class="progress" aria-hidden="true"></div>
 
-									</div>
-									<div class="rightbox">
-										<div class="arlo_tm_mini_title_holder">
-											<h4>I'm Harshit Bagga and <span class="arlo_tm_animation_text_word"></span></h4>
-										</div>
-										<div class="definition">
-											<p>Hi! My name is <strong>Harshit Bagga</strong>. I'm a programmer, and I'm quite enthusiastic about what I do. I've been a professional developer for a year, and throughout that time I've learned the abilities and expertise required to complete a project successfully. I like every step of the design process, from conceptualization and collaboration to implementation. I feel proud to write solutions that might in some way help people.</p>
-										</div>
-										<div class="about_short_contact_wrap">
-											<ul>
-												<li>
-													<span><label>Birthday:</label> 09 Nov 1998</span>
-												</li>
-												<li>
-													<span><label>Age:</label> 23</span>
-												</li>
-												<li>
-													<span><label>City:</label> toronto, Canada</span>
-												</li>
-												<li>
-													<span><label>Interests:</label> Photography, Gaming, Astrophysics</span>
-												</li>
-												<li>
-													<span><label>Study:</label> Lakehead University</span>
-												</li>
-												<li>
-													<span><label>Degree:</label> BSc Computer Science</span>
-												</li>	
-												<li>
-													<span><label>Website:</label> <a href="harshitbagga.github.io">harshitbagga.github.io</a></span>
-												</li>
-												<li>
-													<span><label>Mail:</label> <a href="mailto:harshitbagga10@gmail.com">harshitbagga10&#64;gmail.com</a></span>
-												</li>
-												<li>
-													<span><label>Phone:</label> <a href="#">+1(807)-358-1713</a></span>
-												</li>
-												<li>
-													<span><label>Link:</label> <a href="https://github.com/harshitbagga/University-Projects">&#64;GitHub</a></span>
-												</li>
-											</ul>
-										</div>
-										<div class="buttons_wrap">
-											<ul>
-												<li>
-													<a href="https://github.com/harshitbagga/University-Projects/blob/main/Resume.docx"><span>Download Resume</span></a>
-												</li>
-												
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /ABOUT -->
-				
-				<!-- SKILLS -->
-				<div class="arlo_tm_section">
-					<div class="arlo_tm_skills_wrap">
-						<div class="container">
-							<div class="inner_wrap">
-								<div class="leftbox">
-									<div class="arlo_tm_mini_title_holder">
-										<h4>About my Abilities</h4>
-									</div>
+<header class="site-head">
+  <div class="brand">HB — PORTFOLIO <em>ツ</em></div>
+  <nav class="nav" aria-label="Primary">
+    <a href="#about">About</a>
+    <a href="#xp">XP</a>
+    <a href="#skills">Skills</a>
+    <a href="#work">Work</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
 
-									<p>A guy who takes pride in writing solutions that would help people in some way or another.</p>
- <ul>My Experience
- 	<li>Android app development</li>
- <li>Web Development</li>
-<li>Assets such as Git, GitHub, Docker, Kubernetes</li>
-<li>Languages such as HTML, Bootstrap, CSS, JavaScript, PHP, Kotlin, Java, C++</li>
-<li>Familiar with:-
-Flutter, Dart, CMS(Wix, WordPress, Drupal), Python, HaxeFlixel, Adobe XD, CodeIgniter.</li></ul>
+<!-- ================= HERO ================= -->
+<section class="hero" aria-label="Intro">
+  <canvas id="net"></canvas>
+  <div class="wrap">
+    <div class="hero-eyebrow">
+      <span>Technical CSM × Developer — Est. 2022</span>
+      <span class="status"><span class="pulse"></span>Open to Opportunities · Bengaluru, IN</span>
+    </div>
 
+    <h1 class="hero-name" aria-label="Harshit Bagga">
+      <span class="mask"><span>Harshit</span></span>
+      <span class="mask"><span>Bagga<span class="dot">.</span></span></span>
+    </h1>
 
-								</div>
-								<div class="rightbox">
-									<div class="progress_bar_wrap_total">
-										<div class="arlo_tm_progress_wrap" data-size="small" data-round="c" data-strip="off">
-											<div class="arlo_tm_progress" data-value="80" data-color="#000">
-												<span><span class="label">Kotlin - <span class="experience">2 years of experience</span></span><span class="number">80%</span></span>
-												<div class="arlo_tm_bar_bg"><div class="arlo_tm_bar_wrap"><div class="arlo_tm_bar"></div></div></div>
-											</div>
-											<div class="arlo_tm_progress" data-value="85" data-color="#000">
-												<span><span class="label">HTML - <span class="experience">3 years of experience</span></span><span class="number">85%</span></span>
-												<div class="arlo_tm_bar_bg"><div class="arlo_tm_bar_wrap"><div class="arlo_tm_bar"></div></div></div>
-											</div>
-											<div class="arlo_tm_progress" data-value="75" data-color="#000">
-												<span><span class="label">Java - <span class="experience">3 years of experience</span></span><span class="number">75%</span></span>
-												<div class="arlo_tm_bar_bg"><div class="arlo_tm_bar_wrap"><div class="arlo_tm_bar"></div></div></div>
-											</div>
-											<div class="arlo_tm_progress" data-value="50" data-color="#000">
-												<span><span class="label">Flutter - <span class="experience">6 Months of experience</span></span><span class="number">50%</span></span>
-												<div class="arlo_tm_bar_bg"><div class="arlo_tm_bar_wrap"><div class="arlo_tm_bar"></div></div></div>
-											</div>
-											<div class="arlo_tm_progress" data-value="50" data-color="#000">
-												<span><span class="label">ReactJS - <span class="experience">2 years of experience</span></span><span class="number">50%</span></span>
-												<div class="arlo_tm_bar_bg"><div class="arlo_tm_bar_wrap"><div class="arlo_tm_bar"></div></div></div>
-											</div>
-											<div class="arlo_tm_progress" data-value="40" data-color="#000">
-												<span><span class="label">MongoDB - <span class="experience">2 years of experience</span></span><span class="number">40%</span></span>
-												<div class="arlo_tm_bar_bg"><div class="arlo_tm_bar_wrap"><div class="arlo_tm_bar"></div></div></div>
-											</div>
-											<div class="arlo_tm_progress" data-value="100" data-color="#000">
-												<span><span class="label">SQL - <span class="experience">2 years of experience</span></span><span class="number">100%</span></span>
-												<div class="arlo_tm_bar_bg"><div class="arlo_tm_bar_wrap"><div class="arlo_tm_bar"></div></div></div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /SKILLS -->
-				
-				<!-- SERVICES -->
-				<div class="arlo_tm_section" id="services">
-					<div class="arlo_tm_services_wrap">
-						<div class="container">
-							<div class="arlo_tm_title_holder">
-								<h3>My Projects</h3>
-								<span>GitHub</span>
-							</div>
-							<div class="list_wrap">
-								<ul>
-									<li>
-										<a href="https://github.com/harshitbagga/University-Projects/tree/main/oas">
-										<div class="inner">
-											<div class="icon">
-												<img class="svg" src="img/svg/camera-diaphragm.svg" alt="" />
-											</div>
-											<div class="title_service">
-												<h3>OAS</h3>
-											</div>
-											<div class="text">
-												<p>OAS (Online Auction System) 
-                                                A Full-Scale Website made using PHP CodeIgnitor</p>
-											</div>
-										</div>
-										</a>
-									</li>
-									<li>
-										<a href="https://github.com/harshitbagga/University-Projects/tree/main/Game%20Of%20Life%20kotlin">
-										<div class="inner" >
-											<div class="icon">
-												<img class="svg" src="img/svg/new-tab.svg" alt="" />
-											</div>
-											<div class="title_service">
-												<h3>Game of life</h3>
-											</div>
-											<div class="text">
-												<p>A Game Concept by Jhon horton conway made with kotlin</p>
-											</div>
-										</div>
-									</a>
-									</li>
-									<li>
-										<a href="https://github.com/harshitbagga/University-Projects/tree/main/Card-X-master%20(Kotlin-Android%20application)">
-										<div class="inner">
-											<div class="icon">
-												<img class="svg" src="img/svg/layers.svg" alt="" />
-											</div>
-											<div class="title_service">
-												<h3>Card X -Android</h3>
-											</div>
-											<div class="text">
-												<p>A mobile app in Kotlin with ML based Text Recognition.</p>
-											</div>
-										</div>
-									</a>
-									</li>
-									<li>
-										<a href="https://github.com/harshitbagga/University-Projects/tree/main/Mockup%20Designs">
-										<div class="inner">
-											<div class="icon">
-												<img class="svg" src="img/svg/share.svg" alt="" />
-											</div>
-											<div class="title_service">
-												<h3>Mockup Design</h3>
-											</div>
-											<div class="text">
-												<p>Designed using Adobe XD and Figma. Note: Download it to view properly.</p>
-											</div>
-										</div>
-										</a>
-									</li>
-									<li>
-										<a href="https://github.com/harshitbagga/University-Projects/tree/main/logos">
-										<div class="inner">
-											<div class="icon">
-												<img class="svg" src="img/svg/adobe-illustrator.svg" alt="" />
-											</div>
-											<div class="title_service">
-												<h3>Logo Designs</h3>
-											</div>
-											<div class="text">
-												<p>
-													Random Logo Designs made using Adobe XD, Procreate and Adobe Illustrator.
-												</p>
-											</div>
-										</div>
-										</a>
-									</li>
-									<li>
-										<a href="https://github.com/harshitbagga/University-Projects/tree/main/Bacteria%203d%20game%20Javascript">
-										<div class="inner">
-											<div class="icon">
-												<img class="svg" src="img/svg/seo-performance-marketing-graphic.svg" alt="" />
-											</div>
-											<div class="title_service">
-												<h3>3D Bacteria Game</h3>
-											</div>
-											<div class="text">
-												<p>3D small-scale game made in Javascript and HTML and CSS.</p>
-											</div>
-										</div>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /SERVICES -->
-				
-				<!-- PORTFOLIO -->
-				<div class="arlo_tm_section relative" id="portfolio">
-					<div class="arlo_tm_portfolio_wrapper_all">
+    <div class="hero-foot">
+      <div class="hero-role" data-reveal>
+        <p>Customer Success Associate — Enterprise / Tech Cluster</p>
+        <p class="meta">Exotel · Bengaluru · Jul 2025 – Present</p>
+        <p class="meta">Accounts: Google · Wipro · Adani Group · Infosys · Truecaller</p>
+      </div>
+      <div class="hero-contact" data-reveal style="--d:.12s">
+        <p>Bengaluru, India</p>
+        <p><a href="mailto:harshitbagga10@gmail.com">harshitbagga10@gmail.com</a></p>
+        <p><a href="tel:+917777932774">+91-7777932774</a></p>
+        <div class="hero-cta">
+          <a class="btn btn--solid" href="mailto:harshitbagga10@gmail.com" data-magnet>Email Me</a>
+          <a class="btn btn--ghost" href="#" data-magnet>Resume</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-						<!-- PORTFOLIO FILTER -->
-						<div class="arlo_tm_second_portfolio">
-						<div class="container">
-							<div class="arlo_tm_portfolio_wrap">
-								<div class="arlo_tm_title_holder portfolio">
-									<h3>Photography & Designs</h3>
-									<span>Recently started to put my leg into Photography and Designs for fun</span>
-								</div>
-								<div class="arlo_tm_portfolio_titles"></div>
-								<ul class="arlo_tm_portfolio_filter">
-									<li><a href="#" class="current" data-filter="*">All</a></li>
-									<li><a href="#" data-filter=".design">Design</a></li>
-									<li><a href="#" data-filter=".photography">Photography</a></li>
-									<li><a href="#" data-filter=".development">Development</a></li>
-								</ul>
-								<ul class="arlo_tm_portfolio_list gallery_zoom">
-									<li class="design">
-										<div class="entry arlo_tm_portfolio_animation_wrap" data-title="Mockup Design" data-category="Design">
-											<a href="https://github.com/harshitbagga/University-Projects/tree/main/Mockup%20Designs">
-												<img src="img/portfolio/600x600.jpg" alt="" />
-												<div class="arlo_tm_portfolio_image_main" data-img-url="img/portfolio/1.jpg"></div>
-											</a>
-										</div>
-									</li>
-									<li class="photography">
-										<div class="entry arlo_tm_portfolio_animation_wrap" data-title="Black N White Flower" data-category="Photography">
-											<a href="#">
-												<img src="img/portfolio/600x600.jpg" alt="" />
-												<div class="arlo_tm_portfolio_image_main" data-img-url="img/portfolio/2.jpg"></div>
-											</a>
-										</div>
-									</li>
-									<li class="development">
-										<div class="entry arlo_tm_portfolio_animation_wrap" data-title="OAS Project Screenshot" data-category="Development">
-											<a href="https://github.com/harshitbagga/University-Projects/tree/main/oas">
-												<img src="img/portfolio/600x600.jpg" alt="" />
-												<div class="arlo_tm_portfolio_image_main" data-img-url="img/portfolio/3.jpg"></div>
-											</a>
-										</div>
-									</li>
-									<li class="photography">
-										<div class="entry arlo_tm_portfolio_animation_wrap" data-title="Thunder Bay" data-category="Photography">
-											<a href="#">
-												<img src="img/portfolio/600x600.jpg" alt="" />
-												<div class="arlo_tm_portfolio_image_main" data-img-url="img/portfolio/4.jpg"></div>
-											</a>
-										</div>
-									</li>
-									<li class="design">
-										<div class="entry arlo_tm_portfolio_animation_wrap" data-title="Android App Design" data-category="Design">
-											<a href="https://github.com/harshitbagga/University-Projects/tree/main/Mockup%20Designs">
-												<img src="img/portfolio/600x600.jpg" alt="" />
-												<div class="arlo_tm_portfolio_image_main" data-img-url="img/portfolio/5.jpg"></div>
-											</a>
-										</div>
-									</li>
-									<li class="photography">
-										<div class="entry arlo_tm_portfolio_animation_wrap" data-title="Yellow Flower Portrait" data-category="Photography">
-											<a href="#">
-												<img src="img/portfolio/600x600.jpg" alt="" />
-												<div class="arlo_tm_portfolio_image_main" data-img-url="img/portfolio/6.jpg"></div>
-											</a>
-										</div>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<!-- /PORTFOLIO FILTER -->
-
-					</div>
-				</div>
-				<!-- /PORTFOLIO -->
-				
-				<!-- TESTIMONIALS -->
-				<div class="arlo_tm_section" id="testimonials">
-					<div class="arlo_tm_testimonials_wrapper_all">
-						<div class="arlo_tm_universal_box_wrap">
-							<div class="bg_wrap">
-								<div class="overlay_image testimonial jarallax" data-speed="0"></div>
-								<div class="overlay_color testimonial"></div>
-							</div>
-							<div class="content testimonial">
-								<div class="arlo_tm_testimonial_wrap">
-									<div class="container">
-										<div class="carousel_wrap">
-											<ul class="owl-carousel">
-												<li class="item">
-													<div class="inner">
-														<div class="quotebox_wrap">
-															<i class="xcon-quote-left"></i>
-														</div>
-														<div class="definitions_wrap">
-															<p>“I Write Code Until The Day A Computer Codes Me.”</p>
-														</div>
-														<div class="name_holder">
-															<p>Harshit Bagga</p>
-														</div>
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /TESTIMONIALS -->
-				
-				<!-- COUNTERBOX -->
-				<div class="arlo_tm_section">
-					<div class="container">
-						<div class="arlo_tm_counter_wrap" data-col="4" data-delay="300">
-							<ul class="arlo_tm_counter_list arlo_tm_miniboxes">
-								<li>
-									<div class="inner arlo_tm_minibox">
-										<h3><span><span class="arlo_tm_counter" data-from="0" data-to="15" data-speed="4000">0</span></span></h3>
-										<span>Projects Completed</span>
-									</div>
-								</li>
-								<li>
-									<div class="inner arlo_tm_minibox">
-										<h3><span><span class="arlo_tm_counter" data-from="0" data-to="4000" data-speed="3000">0</span>+</span></h3>
-										<span>Lines of Code</span>
-									</div>
-								</li>
-								<li>
-									<div class="inner arlo_tm_minibox">
-										<h3><span><span class="arlo_tm_counter" data-from="0" data-to="4" data-speed="4000">0</span></span></h3>
-										<span>Certificates Earned</span>
-									</div>
-								</li>
-								<li>
-									<div class="inner arlo_tm_minibox">
-										<h3><span><span class="arlo_tm_counter" data-from="0" data-to="25" data-speed="4000">0</span></span></h3>
-										<span>Technologies Learned</span>
-									</div>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<!-- /COUNTERBOX -->
-				
-				
-
-				<!-- CONTACT & FOOTER -->
-				<div class="arlo_tm_section" id="contact">
-					<div class="container">
-						<div class="arlo_tm_title_holder contact">
-							<h3>Contact Me</h3>
-							<span>Get in touch with me</span>
-						</div>
-					</div>
-					<div class="arlo_tm_footer_contact_wrapper_all">
-						<div class="arlo_tm_contact_wrap_all">
-							<div class="container">
-								<div class="leftbox">
-									<div class="arlo_tm_mini_title_holder contact">
-										<h4>Information</h4>
-									</div>
-									<div class="short_info_wrap">
-										<ul>
-											<li><p><label>Address:</label><span>Dufferin St Toronto, ON Canada</span></p></li>
-											<li><p><label>Email:</label><span><a href="mailto:harshitbagga10@gmail.com">harshitbagga@gmail.com</a></span></p></li>
-											<li><p><label>Phone:</label><span>+1(807)-358-1713</span></p></li>
-										
-										</ul>
-									</div>
-								</div>
-								
-							</div>
-						</div>
-						<div class="arlo_tm_footer_wrap">
-							<div class="container">
-								<p>&copy; Copyright 2019. All Rights are Reserved.</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /CONTACT & FOOTER -->
-				
-			</div>
-		</div>
-		<!-- /RIGHTPART -->
-		
-		<a class="arlo_tm_totop" href="#"></a> 
-		
-	</div>
+<!-- ================= MARQUEE ================= -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Open to Opportunities</span><span class="sep">✦</span>
+    <span>Customer Success × Engineering</span><span class="sep">✦</span>
+    <span>Retention · Expansion · Scalable Solutions</span><span class="sep">✦</span>
+    <span>Bengaluru, IN</span><span class="sep">✦</span>
+    <span>Open to Opportunities</span><span class="sep">✦</span>
+    <span>Customer Success × Engineering</span><span class="sep">✦</span>
+    <span>Retention · Expansion · Scalable Solutions</span><span class="sep">✦</span>
+    <span>Bengaluru, IN</span><span class="sep">✦</span>
+  </div>
 </div>
-<!-- / WRAPPER ALL -->
-	
-<!-- SCRIPTS -->
-<script src="js/jquery.js"></script>
-<!--[if lt IE 10]> <script type="text/javascript" src="js/ie8.js"></script> <![endif]-->	
-<script src="js/plugins.js"></script>
-<script src="js/init.js"></script>
-<!-- /SCRIPTS -->
 
+<!-- ================= ABOUT ================= -->
+<section class="section" id="about" aria-label="About">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <span class="sec-label">// About</span>
+      <span class="sec-note">Gujarat → Ontario → Bengaluru</span>
+    </div>
+    <div class="about-grid">
+      <p class="about-lede" data-reveal>Half engineer. Half relationship builder. <em>Fully accountable</em> for your success.</p>
+      <div class="about-copy" data-reveal style="--d:.12s">
+        <p>I speak both languages — technical and business. Trained as a computer engineer in Gujarat, graduated in Computer Science from Lakehead University in Canada, and cut my teeth supporting global users from Toronto before coming home to India's SaaS scene.</p>
+        <p>Today at Exotel I own technical success for some of India's largest enterprise accounts across CPaaS — from API integrations and custom solutioning to AI-driven automation that makes the whole machine run faster.</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat" data-reveal><b data-count="4">0</b><span>Years across support · advocacy · success</span></div>
+      <div class="stat" data-reveal style="--d:.1s"><b data-count="5">0</b><span>Enterprise accounts owned</span></div>
+      <div class="stat" data-reveal style="--d:.2s"><b data-count="4">0</b><span>Languages spoken</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= XP ================= -->
+<section class="section section--dark" id="xp" aria-label="Experience">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <span class="sec-label">// XP</span>
+      <h2 class="sec-title">Experience</h2>
+      <span class="sec-note">Support → Advocacy → Success</span>
+    </div>
+
+    <article class="xp-item" data-reveal>
+      <div class="xp-when">Jul 2025 — Present</div>
+      <div>
+        <h3 class="xp-role">Customer Success Associate — Enterprise / Tech Cluster</h3>
+        <p class="xp-org">Exotel · Bengaluru, IN</p>
+        <p class="xp-desc">Managing strategic enterprise accounts across CPaaS — Google, Wipro, Adani Group, Infosys, Truecaller — owning retention, growth, and technical success end to end. Supporting API integrations, building custom solutions such as tailored invoicing workflows, and leading AI-driven automation that cuts manual effort across internal workflows.</p>
+        <div class="xp-tags">
+          <span>CPaaS</span><span>Enterprise Accounts</span><span>API Integrations</span><span>AI Automation</span><span>Retention &amp; Growth</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="xp-item" data-reveal style="--d:.08s">
+      <div class="xp-when">Feb 2024 — May 2025</div>
+      <div>
+        <h3 class="xp-role">Technical Product Advocate</h3>
+        <p class="xp-org">videosdk.live · Surat, IN</p>
+        <p class="xp-desc">First-line technical partner for developers shipping real-time video — resolving coding challenges and integrations across Flutter, Kotlin, Python, JavaScript, and React, monitoring application performance with New Relic, and managing client relationships in HubSpot. Bridged customers, product, and engineering to turn feedback into shipped fixes.</p>
+        <div class="xp-tags">
+          <span>Developer Support</span><span>API Integration</span><span>Flutter · React</span><span>New Relic</span><span>HubSpot CRM</span><span>QA &amp; Testing</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="xp-item" data-reveal style="--d:.16s">
+      <div class="xp-when">Oct 2022 — Oct 2023</div>
+      <div>
+        <h3 class="xp-role">Technical Support Specialist — Remote Support</h3>
+        <p class="xp-org">FDM Group · Toronto, CA</p>
+        <p class="xp-desc">Delivered remote technical support to global end users across software, hardware, and network environments — administering Active Directory, setting up secure remote access, and escalating complex incidents alongside senior infrastructure teams. Authored knowledge-base articles that streamlined recurring-issue resolution and lifted CSAT.</p>
+        <div class="xp-tags">
+          <span>Remote Support</span><span>Active Directory</span><span>Incident Escalation</span><span>Documentation</span><span>CSAT</span>
+        </div>
+      </div>
+    </article>
+
+    <div class="xp-subhead" data-reveal><span class="sec-label">// Education</span></div>
+
+    <article class="xp-item xp-item--edu" data-reveal>
+      <div class="xp-when">Jan 2019 — Apr 2022</div>
+      <div>
+        <h3 class="xp-role">BSc, Computer Science</h3>
+        <p class="xp-org">Lakehead University · Ontario, CA</p>
+        <p class="xp-desc">Grade: 9.7</p>
+      </div>
+    </article>
+
+    <article class="xp-item xp-item--edu" data-reveal style="--d:.08s">
+      <div class="xp-when">May 2015 — Sep 2018</div>
+      <div>
+        <h3 class="xp-role">Diploma, Computer Engineering</h3>
+        <p class="xp-org">R. N. G. Patel Institute of Technology · Gujarat, IN</p>
+        <p class="xp-desc">Grade: 8.95</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section class="section" id="skills" aria-label="Skills">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <span class="sec-label">// Skills</span>
+      <h2 class="sec-title">Toolkit</h2>
+      <span class="sec-note">Both languages — technical &amp; business</span>
+    </div>
+
+    <div class="skill-group" data-reveal>
+      <div class="skill-name">Customer Success</div>
+      <div class="chips"><span class="chip">Retention &amp; Expansion</span><span class="chip">Customer Experience Mgmt</span><span class="chip">CRM · HubSpot</span><span class="chip">Product Support</span><span class="chip">Technical Analysis</span><span class="chip">Strategic Planning</span><span class="chip">Stakeholder Mgmt</span></div>
+    </div>
+    <div class="skill-group" data-reveal style="--d:.08s">
+      <div class="skill-name">Languages &amp; Frameworks</div>
+      <div class="chips"><span class="chip">Python</span><span class="chip">JavaScript</span><span class="chip">Kotlin</span><span class="chip">PHP</span><span class="chip">C · C++</span><span class="chip">React.js</span><span class="chip">Node.js</span><span class="chip">Flutter</span><span class="chip">CodeIgniter</span></div>
+    </div>
+    <div class="skill-group" data-reveal style="--d:.16s">
+      <div class="skill-name">Web &amp; Data</div>
+      <div class="chips"><span class="chip">REST APIs</span><span class="chip">SQL · MySQL</span><span class="chip">DBMS</span><span class="chip">HTML5</span><span class="chip">CSS</span><span class="chip">Bootstrap</span><span class="chip">WebGL</span></div>
+    </div>
+    <div class="skill-group" data-reveal style="--d:.24s">
+      <div class="skill-name">Tools &amp; Platforms</div>
+      <div class="chips"><span class="chip">Git</span><span class="chip">Linux</span><span class="chip">Android Studio</span><span class="chip">New Relic</span><span class="chip">Selenium</span><span class="chip">Docker</span><span class="chip">Figma</span><span class="chip">Adobe XD</span><span class="chip">Microsoft 365</span></div>
+    </div>
+    <div class="skill-group" data-reveal style="--d:.32s">
+      <div class="skill-name">Spoken</div>
+      <div class="chips"><span class="chip">English</span><span class="chip">Hindi</span><span class="chip">Gujarati</span><span class="chip">Punjabi</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WORK ================= -->
+<section class="section section--dark" id="work" aria-label="Things I've built">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <span class="sec-label">// Work</span>
+      <h2 class="sec-title">Things I've Built.</h2>
+      <span class="sec-note">Selected builds — hover to explore</span>
+    </div>
+
+    <div class="proj-list">
+      <a class="proj" href="https://github.com/harshitbagga" target="_blank" rel="noopener" data-reveal>
+        <span class="proj-idx">01</span>
+        <span>
+          <span class="proj-title">Online Auction System</span>
+          <span class="proj-desc">Full-stack platform for real-time auctions — registration, bidding, listings, payment and win-history modules over a relational schema of User, Product, Bid, and Payment masters.</span>
+          <span class="proj-chips"><span>PHP</span><span>SQL</span><span>JavaScript</span><span>jQuery</span><span>Adobe XD</span></span>
+        </span>
+        <span class="proj-meta"><span>Web · Full-Stack</span><span class="proj-arrow">↗</span></span>
+      </a>
+
+      <a class="proj" href="https://github.com/harshitbagga" target="_blank" rel="noopener" data-reveal style="--d:.06s">
+        <span class="proj-idx">02</span>
+        <span>
+          <span class="proj-title">Card-X — Digital E-Wallet for Visiting Cards</span>
+          <span class="proj-desc">Kotlin Android app that creates, stores, and manages multiple visiting cards — with dynamic detail sync that keeps every stored card current across wallets.</span>
+          <span class="proj-chips"><span>Kotlin</span><span>Android Studio</span><span>Android SDK</span><span>UI Design</span></span>
+        </span>
+        <span class="proj-meta"><span>Android · Mobile</span><span class="proj-arrow">↗</span></span>
+      </a>
+
+      <a class="proj" href="https://github.com/harshitbagga" target="_blank" rel="noopener" data-reveal style="--d:.12s">
+        <span class="proj-idx">03</span>
+        <span>
+          <span class="proj-title">Bacto — 3D Bacteria Eradication Game</span>
+          <span class="proj-desc">Interactive 3D browser game — click color-coded bacteria before they hit threshold, scored on reaction speed and precision. Real-time WebGL rendering and asynchronous event handling.</span>
+          <span class="proj-chips"><span>WebGL</span><span>JavaScript</span><span>Game Mechanics</span></span>
+        </span>
+        <span class="proj-meta"><span>Web · 3D Game</span><span class="proj-arrow">↗</span></span>
+      </a>
+
+      <a class="proj" href="https://github.com/harshitbagga" target="_blank" rel="noopener" data-reveal style="--d:.18s">
+        <span class="proj-idx">04</span>
+        <span>
+          <span class="proj-title">Food Management</span>
+          <span class="proj-desc">Concurrent order system in Kotlin — tracks multiple sub-orders in parallel with structured concurrency and coroutines for faster execution and responsiveness.</span>
+          <span class="proj-chips"><span>Kotlin</span><span>Coroutines</span><span>OOP</span><span>Multithreading</span></span>
+        </span>
+        <span class="proj-meta"><span>Kotlin · Systems</span><span class="proj-arrow">↗</span></span>
+      </a>
+
+      <a class="proj" href="https://github.com/harshitbagga" target="_blank" rel="noopener" data-reveal style="--d:.24s">
+        <span class="proj-idx">05</span>
+        <span>
+          <span class="proj-title">Multi-Domain App Mockup Showcase</span>
+          <span class="proj-desc">Design collection spanning chat, real estate, telemedicine, and task management — exploring UI structures, user flows, and documentation formats with interface consistency across domains.</span>
+          <span class="proj-chips"><span>Figma</span><span>Adobe XD</span><span>Sketch</span><span>UX Design</span></span>
+        </span>
+        <span class="proj-meta"><span>Design · UI/UX</span><span class="proj-arrow">↗</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="section section--dark" id="contact" aria-label="Contact">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <span class="sec-label">// Contact</span>
+      <span class="sec-note">Open to new opportunities</span>
+    </div>
+    <h2 class="contact-title" data-reveal>Let's Talk<span class="dot">.</span></h2>
+
+    <div class="contact-grid">
+      <div class="contact-block" data-reveal>
+        <span class="lbl">Email</span>
+        <a href="mailto:harshitbagga10@gmail.com">harshitbagga10@gmail.com</a>
+      </div>
+      <div class="contact-block" data-reveal style="--d:.08s">
+        <span class="lbl">Phone</span>
+        <a href="tel:+917777932774">+91-7777932774</a>
+      </div>
+      <div class="contact-block" data-reveal style="--d:.16s">
+        <span class="lbl">Base</span>
+        <a href="#contact">Bengaluru, India</a>
+      </div>
+      <div class="contact-block" data-reveal style="--d:.24s">
+        <span class="lbl">Elsewhere</span>
+        <div class="contact-links">
+          <a href="https://www.linkedin.com/in/harshitbagga" target="_blank" rel="me noopener">LinkedIn</a>
+          <a href="https://github.com/harshitbagga" target="_blank" rel="me noopener">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>© 2026 Harshit Bagga</span>
+      <span>Half Engineer · Half Relationship Builder</span>
+      <span>Bengaluru, IN</span>
+    </div>
+  </div>
+</section>
+
+<script>
+(() => {
+  "use strict";
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  /* ---------- load-in ---------- */
+  requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add("loaded")));
+
+  /* ==========================================================
+     CONTRAST-ADAPTIVE CURSOR
+     The dot + ring are pure white and sit in a
+     mix-blend-mode:difference layer, so the browser inverts
+     them per-pixel: black on the cream, white on the dark
+     sections — always the contrast colour of what's beneath.
+     ========================================================== */
+  if (finePointer) {
+    const dot  = document.querySelector(".cursor--dot");
+    const ring = document.querySelector(".cursor--ring");
+    let mx = innerWidth / 2, my = innerHeight / 2;
+    let dx = mx, dy = my, rx = mx, ry = my;
+    let started = false;
+
+    addEventListener("pointermove", (e) => {
+      mx = e.clientX; my = e.clientY;
+      if (!started) { started = true; dx = rx = mx; dy = ry = my; document.body.classList.add("cursor-on"); }
+    }, { passive: true });
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+    (function loop() {
+      dx = lerp(dx, mx, 0.55); dy = lerp(dy, my, 0.55);
+      rx = lerp(rx, mx, reduced ? 1 : 0.16); ry = lerp(ry, my, reduced ? 1 : 0.16);
+      dot.style.transform  = `translate(${dx}px, ${dy}px)`;
+      ring.style.transform = `translate(${rx}px, ${ry}px)`;
+      requestAnimationFrame(loop);
+    })();
+
+    const hoverables = "a, button, .chip, .proj";
+    document.addEventListener("pointerover", (e) => {
+      if (e.target.closest(hoverables)) document.body.classList.add("cursor-hover");
+    });
+    document.addEventListener("pointerout", (e) => {
+      if (e.target.closest(hoverables)) document.body.classList.remove("cursor-hover");
+    });
+    addEventListener("pointerdown", () => document.body.classList.add("cursor-down"));
+    addEventListener("pointerup",   () => document.body.classList.remove("cursor-down"));
+    document.documentElement.addEventListener("pointerleave", () => document.body.classList.remove("cursor-on"));
+    document.documentElement.addEventListener("pointerenter", () => started && document.body.classList.add("cursor-on"));
+  }
+
+  /* ---------- scroll progress ---------- */
+  const bar = document.querySelector(".progress");
+  const onScroll = () => {
+    const h = document.documentElement;
+    const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+    bar.style.transform = `scaleX(${p})`;
+  };
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  /* ---------- reveal on view ---------- */
+  const io = new IntersectionObserver((entries) => {
+    for (const en of entries) if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+  }, { rootMargin: "-80px 0px" });
+  document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+
+  /* ---------- count-up stats ---------- */
+  const cio = new IntersectionObserver((entries) => {
+    for (const en of entries) {
+      if (!en.isIntersecting) continue;
+      const el = en.target, target = +el.dataset.count, t0 = performance.now();
+      const tick = (t) => {
+        const k = Math.min((t - t0) / 900, 1);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - k, 3)));
+        if (k < 1) requestAnimationFrame(tick);
+      };
+      reduced ? (el.textContent = target) : requestAnimationFrame(tick);
+      cio.unobserve(el);
+    }
+  }, { threshold: 0.6 });
+  document.querySelectorAll("[data-count]").forEach((el) => cio.observe(el));
+
+  /* ---------- magnetic CTAs ---------- */
+  if (finePointer && !reduced) {
+    document.querySelectorAll("[data-magnet]").forEach((el) => {
+      el.addEventListener("pointermove", (e) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width / 2) * 0.22;
+        const y = (e.clientY - r.top - r.height / 2) * 0.22;
+        el.style.transform = `translate(${x}px, ${y}px)`;
+      });
+      el.addEventListener("pointerleave", () => { el.style.transform = ""; });
+    });
+  }
+
+  /* ==========================================================
+     CONSTELLATION CANVAS (hero)
+     ========================================================== */
+  const canvas = document.getElementById("net");
+  const ctx = canvas.getContext("2d");
+  let W = 0, H = 0, nodes = [], raf = null;
+  const DPR = Math.min(devicePixelRatio || 1, 2);
+
+  function seed() {
+    const count = Math.max(40, Math.min(90, Math.round((W * H) / 22000)));
+    nodes = Array.from({ length: count }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.22,
+      vy: (Math.random() - 0.5) * 0.22,
+      r: Math.random() * 2 + 1,
+      accent: Math.random() < 0.07,
+    }));
+  }
+  function size() {
+    const hero = canvas.parentElement;
+    W = hero.clientWidth; H = hero.clientHeight;
+    canvas.width = W * DPR; canvas.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    seed();
+    if (reduced) draw(); // static frame for reduced motion
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const LINK = 130;
+    for (let i = 0; i < nodes.length; i++) {
+      const a = nodes[i];
+      for (let j = i + 1; j < nodes.length; j++) {
+        const b = nodes[j];
+        const dx = a.x - b.x, dy = a.y - b.y, d = Math.hypot(dx, dy);
+        if (d < LINK) {
+          ctx.strokeStyle = `rgba(20,20,20,${(1 - d / LINK) * 0.14})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+      }
+    }
+    for (const n of nodes) {
+      ctx.fillStyle = n.accent ? "#FF4D00" : "rgba(20,20,20,.35)";
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.accent ? n.r + 2 : n.r, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+  function step() {
+    for (const n of nodes) {
+      n.x += n.vx; n.y += n.vy;
+      if (n.x < -10) n.x = W + 10; if (n.x > W + 10) n.x = -10;
+      if (n.y < -10) n.y = H + 10; if (n.y > H + 10) n.y = -10;
+    }
+    draw();
+    raf = requestAnimationFrame(step);
+  }
+  size();
+  addEventListener("resize", size, { passive: true });
+  if (!reduced) {
+    raf = requestAnimationFrame(step);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) cancelAnimationFrame(raf);
+      else raf = requestAnimationFrame(step);
+    });
+  }
+})();
+</script>
 </body>
-
-
 </html>
